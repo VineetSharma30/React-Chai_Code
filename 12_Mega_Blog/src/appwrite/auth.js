@@ -1,5 +1,5 @@
 import conf from "../conf/conf";
-import { Client, Account, ID } from "appwrite";
+import { Client, Account, ID, Permission, Role } from "appwrite";
 
 // This is an authentication service for appwrite and can be used in anyother project using appwrite as a backend serrvice. 
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
 
     async createAccount({email, password, name}){
         try {
-            const userAccount = await this.account(
+            const userAccount = await this.account.create(
                 ID.unique(), 
                 email, 
                 password, 
@@ -31,7 +31,7 @@ export class AuthService {
         }
     }
 
-    async login(){
+    async login({email, password}){
         try {
             return await this.account.createEmailPasswordSession({email,password});
         }catch(error){

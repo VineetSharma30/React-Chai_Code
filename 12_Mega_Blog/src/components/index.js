@@ -20,6 +20,7 @@ export {
     Logo, 
     LogoutBtn,
     RTE,
+    Login,
     Signup,
     Input,
     PostCard,

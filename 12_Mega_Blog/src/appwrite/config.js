@@ -1,10 +1,11 @@
 import conf from "../conf/conf";
-import {client, ID, Databases, Storage, Query, Client, Account } from "appwrite"
+import { ID, Databases, Storage, Query, Client, Account, Permission, Role } from "appwrite"
 
-export class Services{
+
+export  class Service{
     client = new Client();
-    databases = new Databases();
-    bucket ;
+    databases;
+    bucket;
     constructor(){
         this.client
             .setEndpoint(conf.appwriteUrl)
@@ -90,7 +91,6 @@ export class Services{
             console.log("Appwrite  service :: getPosts :: error ",error);
             return false;
         }
-
     }
 
     // file upload services
@@ -100,7 +100,8 @@ export class Services{
             return await this.bucket.createFile(
                 conf.BucketId,
                 ID.unique(),
-                file
+                file,
+                [Permission.read(Role.any())]
             )
         } catch (error) {
             console.log("Appwrite  service :: uploadFile :: error ",error);
@@ -121,9 +122,12 @@ export class Services{
     }
 
     getFilePreview(fileID){
-        return this.bucket.getFilePreview(
+        return this.bucket.getFileView(
             conf.BucketId,
             fileID
         )
     }
 }
+
+const service = new Service()
+export default service
