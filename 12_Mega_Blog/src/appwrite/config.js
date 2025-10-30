@@ -6,6 +6,7 @@ export  class Service{
     client = new Client();
     databases;
     bucket;
+    documentId;
     constructor(){
         this.client
             .setEndpoint(conf.appwriteUrl)
@@ -21,8 +22,9 @@ export  class Service{
             return await this.databases.createDocument(
                 conf.DatabaseId,
                 conf.CollectionId,
-                slug,
-                {
+                String(ID.unique()),
+                {   
+                    slug,
                     title,
                     content,
                     featuredImage,

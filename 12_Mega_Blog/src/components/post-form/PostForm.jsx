@@ -2,7 +2,7 @@ import React , {useCallback} from 'react'
 import { useForm } from 'react-hook-form'
 import {Button, Input, Select, RTE} from '../index'
 import appwriteService from '../../appwrite/config'
-import { data, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 function PostForm({post}) {
@@ -16,10 +16,10 @@ function PostForm({post}) {
     })
 
     const navigate = useNavigate()
-    const userData = useSelector(state => state.user.userData)
+    const userData = useSelector(state => state.auth.userData)
     const submit = async (data)=> {
         if (post){
-            data.image[0] ? appwriteService.uploadFile(data.image[0]) : null
+            const file = data.image[0] ? appwriteService.uploadFile(data.image[0]) : null
 
             if (file){
                 appwriteService.deleteFile(post.featuredImage)
@@ -35,7 +35,7 @@ function PostForm({post}) {
         } else {
             const file  = await appwriteService.uploadFile(data.image[0])
             if (file){
-                const fileId  = fiel.$id
+                const fileId  = file.$id
                 data.featuredImage = fileId
                 const dbPost = await appwriteService.createPost({
                     ...data,
@@ -111,7 +111,7 @@ function PostForm({post}) {
                     className="mb-4"
                     {...register("status", { required: true })}
                 />
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
+                <Button type="submit" className={`w-full rounded-lg py-1.5 ${post ? "bg-green-500" : "bg-blue-500"}`}>
                     {post ? "Update" : "Submit"}
                 </Button>
             </div>
